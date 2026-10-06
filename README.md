@@ -20,7 +20,7 @@ En aquest repositori de github aprendrem a configurar la xarxa de les maquines, 
 
 ![foto 4](img/foto4.png)
 
- Opcions de l’adaptador de xarxa de la màquina virtual, configurat en mode pont.
+ Opcions de l’adaptador de xarxa de la màquina virtual, configurat en Xarxa interna.
 
 ![foto 5](img/foto5.png)
 
