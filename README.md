@@ -1,6 +1,6 @@
 # Zorin OS i configuració de xarxa
 
-Aquest recull presenta les captures del document de referència: inici de Zorin OS, configuració de xarxa, proves al terminal, Wireshark i servei DHCP. Les explicacions descriuen el que es veu a cada foto.
+En aquest repositori de github aprendrem a configurar la xarxa de les maquines, ja siguin virtuals com fisiques, tambe com s'utiliza la aplicacio Wireshark i el servei DHCP
 
 ## Captures inicials de Zorin OS
 
