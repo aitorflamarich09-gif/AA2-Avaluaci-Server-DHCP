@@ -378,3 +378,6 @@ S'han treballat diferents aspectes de l'administració de xarxes: configuració 
 La validació de la configuració i la comprovació de l'estat del servei han permès confirmar que el servidor DHCP Kea queda en execució i preparat per gestionar les concessions de la subxarxa configurada.
 
 La documentació de les ordres i configuracions en blocs de codi facilita la reproducció de la pràctica i permet copiar directament cada comanda des del document.
+
+## Enllaç al github
+https://github.com/aitorflamarich09-gif/AA2-Avaluaci-Server-DHCP#13-comprovaci%C3%B3-final-de-les-interf%C3%ADcies
