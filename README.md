@@ -2,7 +2,7 @@
 
 ## 1. Introducció
 
-Aquesta pràctica té com a objectiu configurar i verificar la xarxa d'una màquina amb **Zorin OS** dins d'un entorn virtualitzat. Durant l'activitat es treballa amb la configuració de les interfícies de xarxa, les adreces IP, **Wireshark** i el servei **DHCP Kea**.
+Aquesta pràctica té com a objectiu configurar i verificar la xarxa d'una màquina amb Zorin OS dins d'un entorn virtualitzat. Durant l'activitat es treballa amb la configuració de les interfícies de xarxa, les adreces IP, Wireshark i el servei DHCP Kea.
 
 La pràctica permet comprovar el funcionament de la xarxa tant des del terminal com mitjançant l'anàlisi del trànsit de xarxa.
 
