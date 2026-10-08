@@ -1,107 +1,380 @@
-# Zorin OS i configuració de xarxa
+# Zorin OS: configuració de xarxa, Wireshark i servei DHCP
 
-En aquest repositori de github aprendrem a configurar la xarxa de les maquines, ja siguin virtuals com fisiques, tambe com s'utiliza la aplicacio Wireshark i el servei DHCP
+## 1. Introducció
 
-## Captures inicials de Zorin OS
+Aquesta pràctica té com a objectiu configurar i verificar la xarxa d'una màquina amb **Zorin OS** dins d'un entorn virtualitzat. Durant l'activitat es treballa amb la configuració de les interfícies de xarxa, les adreces IP, **Wireshark** i el servei **DHCP Kea**.
 
-![foto 1](img/foto1.png)
+La pràctica permet comprovar el funcionament de la xarxa tant des del terminal com mitjançant l'anàlisi del trànsit de xarxa.
 
- Fragment visual de la finestra de recursos durant l’inici de Zorin.
 
-![foto 2](img/foto2.png)
 
- Pantalla d’arrencada de Zorin OS 18.
 
-![foto 3](img/foto3.png)
+## 2. Inici de Zorin OS
 
- Escriptori de Zorin OS un cop s’ha iniciat el sistema.
+### 2.1. Arrencada del sistema
 
-## Configuració de xarxa
+![Captura 1](img/foto1.png)
 
-![foto 4](img/foto4.png)
+Aqui es pot veure com s'he esta instal·lan la maquina Zorin.
 
- Opcions de l’adaptador de xarxa de la màquina virtual, configurat en Xarxa interna.
+![Captura 2](img/foto2.png)
 
-![foto 5](img/foto5.png)
+Pantalla d'arrencada de Zorin.
 
- Configuració IPv4 manual amb adreça, passarel·la i DNS.
+![Captura 3](img/foto3.png)
 
-## Comprovacions de xarxa amb terminal
+Escriptori de Zorin un cop finalitzada l'arrencada.
 
-![foto 6](img/foto6.png)
+---
 
- Informació de les interfícies de xarxa mostrada al terminal.
+## 3. Configuració de la xarxa
 
-![foto 7](img/foto7.png)
+### 3.1. Configuració de l'adaptador de VirtualBox
 
- Vista de la configuració de l’adaptador virtual.
+![Captura 4](img/foto4.png)
 
-![foto 8](img/foto8.png)
+La màquina virtual disposa d'un adaptador de xarxa interna per poder comincar les dues màquines virtual entre elles.
 
- Resultat de consultes de xarxa i adreces del sistema.
+![Captura 5](img/foto5.png)
 
-## Entorn del sistema
+Configuració de la interfície de xarxa amb IPv4. En les diferents fases de la pràctica es treballa amb configuracions d'adreçament diferents, que es poden observar a les captures.
 
-![foto 9](img/foto9.png)
+![Captura 7](img/foto7.png)
 
- Resum de les dades del sistema operatiu i dels recursos.
+Vista de l'adaptador de només l'anfitrio per poder fer ssh amb la terminal.
 
-![foto 10](img/foto10.png)
+---
 
- Ordres i sortides de terminal relacionades amb la configuració.
+## 4. Comprovació de la configuració de xarxa
 
-## Wireshark
+### 4.1. Instal·lació de Kea DHCP
 
-![foto 11](img/foto11.png)
+```bash
+sudo apt install kea -y
+```
 
- Instal·lació de Wireshark i dels paquets que necessita.
+![Captura 6](img/foto6.png)
 
-![foto 12](img/foto12.png)
+La captura mostra el procés d'instal·lació dels paquets de Kea i les seves dependències.
 
- Finestra de Wireshark abans d’iniciar una captura.
+### 4.2. Consultar les interfícies i adreces IP
 
-## Anàlisi del trànsit
 
-![foto 13](img/foto13.png)
+![Captura 9](img/foto9.png)
 
- Captura de paquets a Wireshark.
+La comanda mostra informació general del sistema i l'adreça IP assignada a la interfície de xarxa.
 
-![foto 14](img/foto14.png)
+També es pot consultar l'estat de les interfícies amb:
 
- Detall dels camps i protocols d’un paquet capturat.
+```bash
+ip link
+```
 
-## Estat de la xarxa
+![Captura 16](img/foto16.png)
 
-![foto 15](img/foto15.png)
+Aquesta ordre permet comprovar si les interfícies estan actives i consultar les seves adreces MAC.
 
- Informació de les interfícies i del sistema consultada al terminal.
+### 4.3. Consultar la configuració de NetworkManager
 
-![foto 16](img/foto16.png)
+```bash
+nmcli device show
+```
 
- Adreces i estat de la interfície de xarxa.
+![Captura 15](img/foto15.png)
 
-## Comprovació de DHCP
+Aquesta comanda mostra informació detallada de les connexions, incloent-hi adreces IPv4, passarel·les, rutes i servidors DNS.
 
-![foto 17](img/foto17.png)
+---
 
- La consulta indica que el fitxer de concessions no existeix a la ruta provada.
+## 5. Configuració de la interfície de xarxa
 
-![foto 18](img/foto18.png)
+![Captura 8](img/foto8.png)
 
- Fragment de configuració DHCP en format JSON.
+```bash
+sudo nano /etc/netplan/50-cloud-init.yaml
+```
 
-![foto 19](img/foto19.png)
+Fragment de configuració de xarxa en format YAML. La configuració mostrada inclou una interfície amb DHCP i una interfície amb adreça IP estàtica.
 
- Registres d’esdeveniments i canvis relacionats amb DHCP.
+```yaml
+version: 2
 
-## Servei DHCP
+ethernets:
+  enp0s3:
+    dhcp4: true
+  enp0s6:
+    dhcp4: false
+    addresses:
+      - 192.168.50.10/24
+```
 
-![foto 20](img/foto20.png)
 
- Registres d’activitat del servei DHCP.
 
-![foto 21](img/foto21.png)
- Detall de les concessions DHCP i dels clients.
 
-## Conclusió
-En aquesta pràctica he configurat la xarxa de Zorin i he comprovat el seu funcionament amb el terminal de Zorin i Wireshark. També he tingut que cambiar el servei DHCP i els seus registres. Això m’ha ajudat a verue com funciona i com es configura les ips i tota la xarxa de un sistema, ya sigui linux com windows
+## 6. Instal·lació i configuració de Wireshark
+
+### 6.1. Instal·lació
+
+```bash
+sudo apt install wireshark
+```
+
+![Captura 11](img/foto11.png)
+
+La captura mostra la instal·lació de Wireshark i dels paquets necessaris.
+
+### 6.2. Inici de Wireshark
+
+```bash
+sudo wireshark
+```
+
+![Captura 14](img/foto14.png)
+
+Un cop iniciat el programa, es pot seleccionar la interfície sobre la qual es vol realitzar la captura.
+
+![Captura 12](img/foto12.png)
+
+Finestra principal de Wireshark abans d'iniciar una captura.
+
+---
+
+## 7. Captura i anàlisi del trànsit
+
+![Captura 13](img/foto13.png)
+
+Durant la captura s'observen diferents paquets de xarxa. En l'exemple mostrat apareix trànsit **mDNS (Multicast DNS)**.
+
+La captura permet observar el número i la mida del paquet, Ethernet II, adreces MAC, UDP, ports i informació del protocol mDNS.
+
+![Captura 14](img/foto14.png)
+
+També es mostra l'execució de Wireshark i la comprovació posterior de les interfícies amb:
+
+```bash
+ip a
+```
+
+---
+
+## 8. Configuració del servei DHCP Kea
+
+### 8.1. Fitxer de configuració
+
+La configuració del servidor DHCP es realitza mitjançant:
+
+```text
+/etc/kea/kea-dhcp4.conf
+```
+
+En la pràctica es defineixen els temps de renovació, la base de dades de concessions, la subxarxa, les opcions de xarxa, el rang DHCP i una reserva d'adreça IP.
+
+### 8.2. Configuració DHCP
+
+El fragment següent correspon a la configuració que es mostra a les captures:
+
+```json
+{
+  "renew-timer": 1000,
+  "rebind-timer": 2000,
+
+  "lease-database": {
+    "type": "memfile",
+    "persist": true,
+    "name": "/var/lib/kea/kea-leases4.csv"
+  },
+
+  "subnet4": [
+    {
+      "subnet": "192.168.200.0/24",
+
+      "option-data": [
+        {
+          "name": "routers",
+          "data": "192.168.200.1"
+        },
+        {
+          "name": "domain-name-servers",
+          "data": "8.8.8.8"
+        }
+      ],
+
+      "pools": [
+        {
+          "pool": "192.168.200.100-192.168.200.200"
+        }
+      ],
+
+      "reservations": [
+        {
+          "hw-address": "08:00:27:57:20:fc",
+          "ip-address": "192.168.200.50"
+        }
+      ]
+    }
+  ]
+}
+```
+
+
+## 9. Comprovació de les concessions DHCP
+
+A la pràctica es realitza una consulta directa al fitxer de concessions:
+
+```bash
+sudo cat /var/lib/kea/dhcp4.leases
+```
+
+![Captura 17](img/foto17.png)
+
+El resultat de la captura indica:
+
+```text
+cat: /var/lib/kea/dhcp4.leases: No such file or directory
+```
+
+Això és coherent amb la configuració posterior mostrada a la pràctica, on Kea utilitza una base de dades de tipus `memfile` amb el nom:
+
+```text
+/var/lib/kea/kea-leases4.csv
+```
+
+Per consultar el fitxer definit en la configuració:
+
+```bash
+sudo cat /var/lib/kea/kea-leases4.csv
+```
+
+---
+
+## 11. Validació de la configuració de Kea
+
+Abans d'iniciar o reiniciar el servei, es comprova la validesa de la configuració amb:
+
+```bash
+sudo kea-dhcp4 -t /etc/kea/kea-dhcp4.conf
+```
+
+![Captura 19](img/foto19.png)
+
+La sortida mostra que Kea carrega la subxarxa `192.168.200.0/24` i que la configuració es processa sobre la interfície indicada.
+
+---
+
+## 12. Reinici i comprovació del servei DHCP
+
+Després de validar la configuració, es reinicia el servei:
+
+```bash
+sudo systemctl restart kea-dhcp4-server
+```
+
+A continuació, es comprova el seu estat:
+
+```bash
+sudo systemctl status kea-dhcp4-server
+```
+
+![Captura 20](img/foto20.png)
+
+El resultat mostra:
+
+```text
+Active: active (running)
+```
+
+Això confirma que el servei Kea DHCPv4 està executant-se correctament en el moment de la comprovació.
+
+---
+
+## 13. Comprovació final de les interfícies
+
+```bash
+ip a
+```
+
+![Captura 21](img/foto21.png)
+
+La captura mostra diverses interfícies de xarxa, entre elles enp0s3, enp0s8 i enp0s9, juntament amb les seves adreces IPv4, adreces IPv6 i estat.
+
+---
+
+## 14. Resum de totes les ordres
+
+### Instal·lació de Kea
+
+```bash
+sudo apt install kea -y
+```
+
+### Instal·lació de Wireshark
+
+```bash
+sudo apt install wireshark
+```
+
+### Iniciar Wireshark
+
+```bash
+sudo wireshark
+```
+
+### Consultar les interfícies
+
+```bash
+ip a
+```
+
+### Consultar l'estat de les interfícies
+
+```bash
+ip link
+```
+
+### Consultar NetworkManager
+
+```bash
+nmcli device show
+```
+
+### Consultar el fitxer de concessions que apareix a la captura
+
+```bash
+sudo cat /var/lib/kea/dhcp4.leases
+```
+
+### Consultar el fitxer definit a la configuració de Kea
+
+```bash
+sudo cat /var/lib/kea/kea-leases4.csv
+```
+
+### Validar la configuració de Kea
+
+```bash
+sudo kea-dhcp4 -t /etc/kea/kea-dhcp4.conf
+```
+
+### Reiniciar el servei DHCP
+
+```bash
+sudo systemctl restart kea-dhcp4-server
+```
+
+### Comprovar l'estat del servei DHCP
+
+```bash
+sudo systemctl status kea-dhcp4-server
+```
+
+---
+
+## 16. Conclusió
+
+Aquesta pràctica ha permès configurar i verificar el funcionament de la xarxa en un sistema Zorin OS virtualitzat.
+
+S'han treballat diferents aspectes de l'administració de xarxes: configuració d'interfícies, adreçament IPv4, consulta de rutes i DNS, captura de paquets amb Wireshark i instal·lació i configuració d'un servidor DHCP mitjançant Kea.
+
+La validació de la configuració i la comprovació de l'estat del servei han permès confirmar que el servidor DHCP Kea queda en execució i preparat per gestionar les concessions de la subxarxa configurada.
+
+La documentació de les ordres i configuracions en blocs de codi facilita la reproducció de la pràctica i permet copiar directament cada comanda des del document.
